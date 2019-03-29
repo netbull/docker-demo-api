@@ -33,16 +33,10 @@ RUN apk --update \
 
 RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
 
-ARG APP_ENV
-ARG APP_SECRET
-ARG DATABASE_URL
-ENV APP_ENV=$APP_ENV
-ENV APP_SECRET=$APP_SECRET
-ENV DATABASE_URL=$DATABASE_URL
-
 WORKDIR /htdocs
 
 COPY ./src/ /htdocs/
+COPY .env.prod /htdocs/.env
 
 RUN cd /htdocs \
     && composer install \
