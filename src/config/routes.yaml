@@ -1,0 +1,20 @@
+index:
+    path: /
+    controller: App\Controller\DefaultController::indexAction
+
+tasks:
+    path: /tasks
+    controller: App\Controller\TasksController::tasksAction
+    methods: [GET]
+
+task_add:
+    path: /task
+    controller: App\Controller\TasksController::addTaskAction
+    methods: [POST]
+
+task_edit:
+    path: /task/{id}
+    controller: App\Controller\TasksController::editTaskAction
+    requirements:
+        id: \d+
+    methods: [POST]
