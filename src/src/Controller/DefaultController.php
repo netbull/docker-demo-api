@@ -15,6 +15,6 @@ class DefaultController extends AbstractController
      */
     public function indexAction()
     {
-       return $this->json('You shall not pass!');
+       return $this->json('Cool docker demo api!');
     }
 }
