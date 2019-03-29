@@ -7,4 +7,3 @@ services:
             - "4000:80"
         volumes:
             - ./src/:/htdocs/
-            - /htdocs/vendor/
