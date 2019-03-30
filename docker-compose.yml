@@ -1,9 +1,11 @@
 version: '3.7'
 services:
     app:
+        container_name: docker-demo-api
         build: .
         working_dir: /htdocs
         ports:
             - "4000:80"
         volumes:
+            - /htdocs
             - ./src/:/htdocs/

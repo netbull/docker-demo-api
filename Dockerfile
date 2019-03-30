@@ -36,10 +36,9 @@ RUN curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 WORKDIR /htdocs
 
 COPY ./src/ /htdocs/
-COPY .env.prod /htdocs/.env
 
 RUN cd /htdocs \
-    && composer install \
+    && composer install --no-dev --optimize-autoloader \
     && php bin/console doctrine:database:create \
     && php bin/console doctrine:schema:update --force
 
