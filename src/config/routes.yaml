@@ -10,11 +10,11 @@ tasks:
 task_add:
     path: /task
     controller: App\Controller\TasksController::addTaskAction
-    methods: [POST]
+    methods: [POST, OPTIONS]
 
 task_edit:
     path: /task/{id}
     controller: App\Controller\TasksController::editTaskAction
     requirements:
         id: \d+
-    methods: [POST]
+    methods: [PATCH,OPTIONS]
