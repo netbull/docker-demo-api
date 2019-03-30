@@ -38,7 +38,8 @@ WORKDIR /htdocs
 COPY ./src/ /htdocs/
 
 RUN cd /htdocs \
-    && composer install --no-dev --optimize-autoloader
+    && composer install --no-dev --optimize-autoloader \
+    && chmod 777 /htdocs/var/app.db
 
 EXPOSE 80
 
