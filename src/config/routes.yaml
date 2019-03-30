@@ -21,7 +21,7 @@ task_edit:
 
 task_delete:
     path: /task/delete/{id}
-    controller: App\Controller\TasksController::editTaskAction
+    controller: App\Controller\TasksController::deleteTaskAction
     requirements:
         id: \d+
     methods: [POST,OPTIONS]
