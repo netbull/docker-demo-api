@@ -39,7 +39,7 @@ COPY ./src/ /htdocs/
 
 RUN cd /htdocs \
     && composer install --no-dev --optimize-autoloader \
-    && chmod 777 /htdocs/var/app.db
+    && chmod -R 777 /htdocs/var/
 
 EXPOSE 80
 
