@@ -44,8 +44,7 @@ class TasksController extends AbstractController
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
-        $form->submit($request->request->all());
-
+        $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
@@ -86,7 +85,7 @@ class TasksController extends AbstractController
 
         $form = $this->createForm(TaskType::class, $task);
 
-        $form->submit($request->request->all());
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($task);
