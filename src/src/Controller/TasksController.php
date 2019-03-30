@@ -37,6 +37,10 @@ class TasksController extends AbstractController
      */
     public function addTaskAction(Request $request)
     {
+        if (Request::METHOD_OPTIONS === $request->getMethod()) {
+            return $this->json('success');
+        }
+
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -67,6 +71,10 @@ class TasksController extends AbstractController
      */
     public function editTaskAction(int $id, Request $request)
     {
+        if (Request::METHOD_OPTIONS === $request->getMethod()) {
+            return $this->json('success');
+        }
+
         $em = $this->getDoctrine()->getManager();
         $task = $em->getRepository(Task::class)->find($id);
 
