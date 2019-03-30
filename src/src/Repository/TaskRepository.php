@@ -19,6 +19,7 @@ class TaskRepository extends EntityRepository
 
         return $qb
             ->orderBy('t.done', 'ASC')
+            ->addOrderBy('t.createdAt', 'DESC')
             ->getQuery()->getArrayResult();
     }
 }

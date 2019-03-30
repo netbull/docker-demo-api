@@ -2,11 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Task;
-use App\Form\TaskType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use App\Entity\Task;
+use App\Form\TaskType;
 
 /**
  * Class TasksController
@@ -17,7 +18,7 @@ class TasksController extends AbstractController
     /**
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function tasksAction()
+    public function indexAction()
     {
         $data = $this->getDoctrine()->getManager()->getRepository(Task::class)->getTasks();
 
@@ -35,7 +36,7 @@ class TasksController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function addTaskAction(Request $request)
+    public function addAction(Request $request)
     {
         if (Request::METHOD_OPTIONS === $request->getMethod()) {
             return $this->json('success');
@@ -58,9 +59,7 @@ class TasksController extends AbstractController
             ]);
         }
 
-        return $this->json([
-            'Something went wrong..'
-        ], Response::HTTP_BAD_REQUEST);
+        return $this->json('Something went wrong.', Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -68,7 +67,7 @@ class TasksController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function editTaskAction(int $id, Request $request)
+    public function updateAction(int $id, Request $request)
     {
         if (Request::METHOD_OPTIONS === $request->getMethod()) {
             return $this->json('success');
@@ -78,14 +77,16 @@ class TasksController extends AbstractController
         $task = $em->getRepository(Task::class)->find($id);
 
         if (!$task) {
-            return $this->json([
-                'The task was not found!',
-            ], Response::HTTP_BAD_REQUEST);
+            return $this->json('The task was not found!', Response::HTTP_BAD_REQUEST);
         }
 
         $form = $this->createForm(TaskType::class, $task);
 
-        $form->submit($request->request->all());
+        $params = $request->request->all();
+        if (isset($params['done'])) {
+            $params['done'] = ('true' === $params['done'] || '1' === $params['done'] || 1 === $params['done']);
+        }
+        $form->submit($params);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($task);
@@ -98,9 +99,11 @@ class TasksController extends AbstractController
             ]);
         }
 
-        return $this->json([
-            'Something went wrong..'
-        ], Response::HTTP_BAD_REQUEST);
+        if ($form->isSubmitted() && !$form->isValid()) {
+            return $this->json($form->getErrors(true), Response::HTTP_BAD_REQUEST);
+        }
+
+        return $this->json('Something went wrong.', Response::HTTP_BAD_GATEWAY);
     }
 
     /**
@@ -108,7 +111,7 @@ class TasksController extends AbstractController
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function deleteTaskAction(int $id, Request $request)
+    public function deleteAction(int $id, Request $request)
     {
         if (Request::METHOD_OPTIONS === $request->getMethod()) {
             return $this->json('success');
@@ -118,16 +121,12 @@ class TasksController extends AbstractController
         $task = $em->getRepository(Task::class)->find($id);
 
         if (!$task) {
-            return $this->json([
-                'The task was not found!',
-            ], Response::HTTP_BAD_REQUEST);
+            return $this->json('The task was not found!', Response::HTTP_BAD_REQUEST);
         }
 
         $em->remove($task);
         $em->flush();
 
-        return $this->json([
-            'Something went wrong..'
-        ], Response::HTTP_BAD_REQUEST);
+        return $this->json('The task was deleted successfully');
     }
 }
