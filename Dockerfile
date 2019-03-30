@@ -38,11 +38,7 @@ WORKDIR /htdocs
 COPY ./src/ /htdocs/
 
 RUN cd /htdocs \
-    && composer install --no-dev --optimize-autoloader \
-    && php bin/console doctrine:database:create \
-    && php bin/console doctrine:schema:update --force \
-    && mkdir var \
-    && chown www-data:www-data var/app.db
+    && composer install --no-dev --optimize-autoloader
 
 EXPOSE 80
 
