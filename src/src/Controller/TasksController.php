@@ -102,4 +102,32 @@ class TasksController extends AbstractController
             'Something went wrong..'
         ], Response::HTTP_BAD_REQUEST);
     }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function deleteTaskAction(int $id, Request $request)
+    {
+        if (Request::METHOD_OPTIONS === $request->getMethod()) {
+            return $this->json('success');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $task = $em->getRepository(Task::class)->find($id);
+
+        if (!$task) {
+            return $this->json([
+                'The task was not found!',
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $em->remove($task);
+        $em->flush();
+
+        return $this->json([
+            'Something went wrong..'
+        ], Response::HTTP_BAD_REQUEST);
+    }
 }
